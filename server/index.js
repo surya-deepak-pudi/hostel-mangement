@@ -4,11 +4,12 @@ const express = require("express"),
   bodyParser = require("body-parser"),
   port = process.env.PORT || 5000,
   tenents = require("./routes/api/tenents"),
-  branches = require("./routes/api/branches")
-rooms = require("./routes/api/rooms")
+  branches = require("./routes/api/branches"),
+  cors = require("cors")
 
 app.get("/", (req, res) => res.send("hii"))
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 const mongoUri =

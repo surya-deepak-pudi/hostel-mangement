@@ -65,9 +65,27 @@ router.get("/:id", (req, res) => {
 
 //edit
 router.put("/:id", (req, res) => {
-  Tenent.findByIdAndUpdate(req.params.id, req.body)
+  Tenent.findById(req.params.id)
     .then(tenent => {
-      return res.status(200).json(tenent)
+      if(tenent.Branch!==req.body.Branch || tenent.roomNumber!==req.body.roomNumber){
+        Room.findOne({branch:req.body.Branch, number:req.body.roomNumber},(err,room)=>{
+          if(err){
+            console.log(err)
+            return res.status(400).json({msg:"error in finding room"})
+          }
+          else{
+            Tenent.findByIdAndUpdate({...req.body,rent:room.fee},(err,editedTenent)=>{
+              if(err){
+                console.log(err)
+                return res.status(400).json({"msg":"error in updating the tenent"})
+              }
+              else{
+                return res.status(200).json(editedTenent)
+              }
+            })
+          }
+        })
+      }
     })
     .catch(err => {
       //console.log(err)
@@ -77,9 +95,26 @@ router.put("/:id", (req, res) => {
 
 //delete
 router.delete("/:id", (req, res) => {
-  Tenent.findByIdAndDelete(req.params.id)
+  Tenent.findById(req.params.id)
     .then(tenent => {
-      return res.status(200).json("delted")
+      Room.findOne(
+        { branch: tenent.Branch, number: tenent.roomNumber },
+        (err, room) => {
+          if (err) {
+            console.log(err)
+            return res.status(400).json({ msg: "couldnt find the room" })
+          }
+          room.tenents.splice(room.tenents.indexOf(req.params.id), 1)
+          room.vacancies++
+          room.save()
+          Tenent.findByIdAndDelete(req.params.id, (error, deleteUser) => {
+            if (err) {
+              return res.status(400).json({ msg: "couldnrt delte user" })
+            }
+            return res.status(200).json("delted")
+          })
+        }
+      )
     })
     .catch(err => {
       console.log(err)

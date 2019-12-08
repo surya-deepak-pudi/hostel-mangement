@@ -2,55 +2,22 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const TenentSchema = new Schema({
-  name: {
-    type: String
-  },
-  mail: {
-    type: String
-  },
-  mobile: {
-    type: Number
-  },
-  advance: {
-    type: Number
-  },
-  adhar: {
-    type: String
-  },
-  date: {
-    type: Date
-    //
-  },
-  nonVeg: {
-    type: Boolean
-  },
-  occupation: {
-    type: String
-  },
-  Branch: {
-    type: String
-  },
-  roomNumber: {
-    type: String
-  },
-  advancePaid: {
-    type: Number
-  },
-  dues: {
-    type: Number
-  },
-  rent: {
-    type: Number
-  },
-  gaurdianName: {
-    type: String
-  },
-  gaurdianAddress: {
-    type: String
-  },
-  gaurdianNumber: {
-    type: Number
-  }
+  name: String,
+  mail: String,
+  mobile: Number,
+  advance: Number,
+  adhar: String,
+  date: Date,
+  nonVeg: Boolean,
+  occupation: String,
+  Branch: String,
+  roomNumber: String,
+  advancePaid: Number,
+  dues: Number,
+  rent: Number,
+  gaurdianName: String,
+  gaurdianAddress: String,
+  gaurdianNumber: Number
 })
 
 module.exports = mongoose.model("Tenent", TenentSchema)
