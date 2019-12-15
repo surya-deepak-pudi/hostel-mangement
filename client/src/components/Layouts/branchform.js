@@ -1,7 +1,9 @@
-import React, { Fragment, Component } from "react"
-import { Field, reduxForm } from "redux-form"
-import { TextField, Button } from "@material-ui/core"
+import React, { Component, Fragment } from "react"
+import { Field, reduxForm, FieldArray } from "redux-form"
+import { Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import { TextField } from "@material-ui/core"
+// import { connect } from "react-redux"
 import FileBase from "react-file-base64"
 
 class BranchForm extends Component {
@@ -34,6 +36,7 @@ class BranchForm extends Component {
     ...custom
   }) => {
     const classes = this.useStyles()
+
     return (
       <Fragment>
         <TextField
@@ -51,13 +54,8 @@ class BranchForm extends Component {
       </Fragment>
     )
   }
-  inputFieldComponent = ({
-    label,
-    input,
-    meta: { touched, invalid, error },
-    ...custom
-  }) => {
-    const classes = this.useStyles()
+
+  inputFieldComponent = ({ input }) => {
     return (
       <Fragment>
         <FileBase
@@ -77,19 +75,27 @@ class BranchForm extends Component {
       </Fragment>
     )
   }
+
   render() {
+    console.log(this.props.branches)
     return (
-      <form onSubmit={this.props.onSubmit}>
+      <form
+        onSubmit={this.props.handleSubmit(formValues => {
+          this.props.onSubmit(this.props.id, formValues)
+        })}
+      >
         <Field
           name="name"
           label="Enter the Branch name"
           component={this.textFieldComponent}
+          //value={this.props.initValues.name}
         ></Field>
         <br></br>
         <Field
           name="careTaker"
           label="Enter the care taker name"
           component={this.textFieldComponent}
+          //value={this.props.initValues.careTaker}
         ></Field>
         <br></br>
         <Field
@@ -97,6 +103,7 @@ class BranchForm extends Component {
           label="Enter the care taker number"
           type="tel"
           component={this.textFieldComponent}
+          //value={this.props.initValues.number}
         ></Field>
         <br></br>
         <Field
@@ -105,12 +112,14 @@ class BranchForm extends Component {
           type="number"
           size="small"
           component={this.textFieldComponent}
+          //value={this.props.initValues.floors}
         ></Field>
         <br></br>
         <Field
           name="address"
           label="Enter address"
           component={this.textFieldComponent}
+          //value={this.props.initValues.address}
           multiline
           rowsMax="4"
         ></Field>
@@ -119,9 +128,17 @@ class BranchForm extends Component {
           name="image"
           label="upload an image"
           component={this.inputFieldComponent}
+          //value={this.props.initValues.image}
         ></Field>
         <br></br>
-        <Button size="large" color="primary" type="submit" variant="contained" style={{marginTop:"30px"}}>
+
+        <Button
+          size="large"
+          color="primary"
+          type="submit"
+          variant="contained"
+          style={{ marginTop: "30px" }}
+        >
           Submit
         </Button>
       </form>
@@ -130,7 +147,6 @@ class BranchForm extends Component {
 }
 
 const validate = values => {
-  console.log(values)
   const errors = {}
   const requiredFields = [
     "name",
@@ -138,14 +154,14 @@ const validate = values => {
     "number",
     "floors",
     "address",
-    "photo"
+    "image"
   ]
   requiredFields.forEach(field => {
     if (!values[field]) {
       errors[field] = "Required"
     }
   })
-  if (values.number && !values.number.match(/^\d{10}$/)) {
+  if (values.number && !values.number.toString().match(/^\d{10}$/)) {
     errors.number = "invalid phone number"
   }
   // if (
@@ -157,4 +173,8 @@ const validate = values => {
   return errors
 }
 
-export default reduxForm({ form: "branchForm", validate })(BranchForm)
+// const mapStateToProps = state => {
+//   return { branches: state.branches }
+// }
+// connect(mapStateToProps)(), validate
+export default reduxForm({ form: "branchForm" })(BranchForm)

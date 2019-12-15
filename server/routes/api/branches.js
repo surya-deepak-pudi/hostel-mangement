@@ -50,6 +50,7 @@ router.get("/:id", (req, res) => {
 
 //editing a branch
 router.put("/:id", (req, res) => {
+  console.log(req.params.id)
   Branch.findByIdAndUpdate(req.params.id, req.body)
     .then(branch => {
       return res.status(200).json(branch)
@@ -74,6 +75,7 @@ router.delete("/:id", (req, res) => {
 
 const Room = require("../../models/Rooms")
 
+
 //creating a room
 router.post("/:id/rooms/", (req, res) => {
   Branch.findById(req.params.id, (err, branch) => {
@@ -81,6 +83,7 @@ router.post("/:id/rooms/", (req, res) => {
       console.log(err)
       return res.status(400).json("branch not found")
     } else {
+      console.log(req.body)
       Room.create({ branch: branch.name, ...req.body }, (error, room) => {
         if (error) {
           console.log(error)
@@ -95,11 +98,23 @@ router.post("/:id/rooms/", (req, res) => {
   })
 })
 
+//fetching a room
+router.get("/:id/rooms/:roomId",(req,res)=>{
+  Room.findById(req.params.roomId).then(room=>{
+    return res.status(200).json(room)
+  }).catch(err=>{
+    return res.status(400).json(err)
+  })
+})
+
 //editing a room
 router.put("/:id/rooms/:roomId", (req, res) => {
+  console.log("im callled")
+  console.log(req.body)
   Room.findByIdAndUpdate(req.params.roomId, req.body)
     .then(room => {
-      return res.status(200).json(room)
+      console.log(room.data)
+      return res.status(200).json(room.data)
     })
     .catch(err => {
       //console.log(err)
@@ -116,7 +131,7 @@ router.delete("/:id/rooms/:roomId", (req, res) => {
     } else {
       Branch.findById(req.params.id, (error, branch) => {
         if (!error) {
-          branch.rooms.splice(branch.rooms.indexOf(req.params.id), 1)
+          branch.rooms.splice(branch.rooms.indexOf(req.params.roomId), 1)
           branch.save()
         } else {
           console.log(error)

@@ -10,13 +10,15 @@ import {
 const branchesReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_BRANCH:
+      console.log(state)
+      console.log({ ...state, ..._.mapKeys(action.payload, "_id") })
       return { ...state, ..._.mapKeys(action.payload, "_id") }
     case CREATE_BRANCH:
-      return { ...state, [action.payload._id]: [action.payload] }
+      return { ...state, [action.payload._id]: action.payload }
     case SHOW_BRANCH:
-      return { ...state, [action.payload._id]: [action.payload] }
+      return { ...state, [action.payload._id]: action.payload }
     case UPDATE_BRANCH:
-      return { ...state, [action.payload._id]: [action.payload] }
+      return { ...state, [action.payload._id]: action.payload }
     case DELETE_BRANCH:
       return _.omit(state, action.payload)
     default:

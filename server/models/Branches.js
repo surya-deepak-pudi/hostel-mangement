@@ -7,10 +7,7 @@ const BranchSchema = new Schema({
   number: Number,
   floors: Number,
   address: String,
-  image: {
-    imageName: String,
-    imageData: String
-  },
+  image: String,
   rooms: [
     {
       type: mongoose.Schema.Types.ObjectId,

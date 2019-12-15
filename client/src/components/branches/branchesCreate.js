@@ -1,11 +1,11 @@
-import React, { Fragment } from "react"
+import React from "react"
 import BranchForm from "../Layouts/branchform"
 import { connect } from "react-redux"
 import { Typography, Container } from "@material-ui/core"
 
 import { createBranches } from "../../actions/branchesActions"
 
-const branchesCreate = props => {
+const BranchCreate = props => {
   return (
     <Container maxWidth="xl" align="center">
       <Typography
@@ -16,9 +16,9 @@ const branchesCreate = props => {
         Add a Branch
       </Typography>
       <br></br>
-      <BranchForm onSubmit={props.createBranches}></BranchForm>
+      <BranchForm onSubmit={props.createBranches} id=""></BranchForm>
     </Container>
   )
 }
 
-export default connect(null, { createBranches })(branchesCreate)
+export default connect(null, { createBranches })(BranchCreate)
