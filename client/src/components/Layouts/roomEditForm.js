@@ -136,7 +136,20 @@ class RoomEditForm extends Component {
   }
 }
 
-const validate = () => {
-  return null
+const validate = (values, props) => {
+  const errors = {}
+  const requiredFields = ["number", "fee", "beds", "AC", "floor"]
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = "Required"
+    }
+  })
+  if (props.branches) {
+    if (values["floor"] > props.branches.floors) {
+      errors["floor"] = "not a valid floor"
+    }
+  }
+  return errors
 }
+
 export default reduxForm({ form: "roomEditForm", validate })(RoomEditForm)
