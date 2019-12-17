@@ -180,6 +180,18 @@ const validate = (values, props) => {
         roomErrors.fee = "Required"
         roomArrayErrors[roomIndex] = roomErrors
       }
+      if (!room || room.floor<1) {
+        roomErrors.beds = "not a valid number"
+        roomArrayErrors[roomIndex] = roomErrors
+      }
+      if (!room || room.beds<1) {
+        roomErrors.beds = "not a valid number"
+        roomArrayErrors[roomIndex] = roomErrors
+      }
+      if (!room || room.fee<1) {
+        roomErrors.fee = "not a valid number"
+        roomArrayErrors[roomIndex] = roomErrors
+      }
     })
   }
   if (roomArrayErrors.length) {
