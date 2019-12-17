@@ -1,9 +1,6 @@
 import React from "react"
 import Header from "./Layouts/header"
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles"
-import lightBlue from "@material-ui/core/colors/lightBlue"
-import blue from "@material-ui/core/colors/blue"
-import green from "@material-ui/core/colors/green"
 import { BrowserRouter, Route } from "react-router-dom"
 import Home from "./basic/home"
 import Login from "./basic/login"
@@ -19,12 +16,23 @@ import TenentsCreate from "./tenents/tenentsCreate"
 import Rooms from "./rooms/rooms"
 import RoomsCreate from "./rooms/roomsCreate"
 import RoomsEdit from "./rooms/roomsEdit"
-
+// "#006064"-aqaua-#e0f7fa
+//"#01579b"-blue-
 const theme = createMuiTheme({
   palette: {
-    primary: blue,
-    secondary: lightBlue,
-    third: green
+    primary: {
+      light: "#428e92",
+      main: "#006064",
+      dark: "#00363a",
+      contrastText: "white"
+    },
+    secondary: {
+      light: "#92ffc6",
+      main: "#5cdb95",
+      dark: "#1aa867",
+      contrastText: "#000"
+    },
+    background: "#5cdb95"
   }
 })
 export default () => {

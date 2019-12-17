@@ -1,23 +1,13 @@
-import _ from "lodash"
 import {
   FETCH_BRANCH,
   SHOW_BRANCH,
   UPDATE_BRANCH,
   DELETE_BRANCH,
-  CREATE_BRANCH,
-  CREATE_ROOMS
+  CREATE_BRANCH
 } from "./actionTypes"
 // import { createRoomsAction } from "./roomsActions"
 import backend from "../api/backendApi"
 import history from "../history"
-
-const createRooms = (id, rooms) => dispatch => {
-  console.log("Im called too")
-  let room = rooms.pop()
-  backend.post(`/branches/${id}/rooms/`, room).then(rooms => {
-    dispatch({ type: CREATE_ROOMS, payload: rooms.data })
-  })
-}
 
 export const fetchBranches = () => dispatch => {
   backend.get("/branches").then(branches => {

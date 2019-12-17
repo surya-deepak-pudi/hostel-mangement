@@ -1,167 +1,128 @@
 import React, { Component, Fragment } from "react"
 import { Field, reduxForm, FieldArray } from "redux-form"
-import { makeStyles } from "@material-ui/core/styles"
 import {
-  TextField,
   Typography,
-  Container,
   Button,
-  CircularProgress,
   Radio,
-  FormControl,
-  FormControlLabel,
-  RadioGroup,
-  FormLabel,
-  Paper
+  CircularProgress,
+  Grid
 } from "@material-ui/core"
+import {
+  TextFieldComponent,
+  radioButtonComponent,
+  DeleteButton
+} from "../utilities/FieldComponets"
+import { GreyPaper, GreenButton } from "../utilities/styledComponents"
 import { connect } from "react-redux"
 import { deleteRoomsAction } from "../../actions/roomsActions"
 
+//class declaration
+
 class RoomForm extends Component {
-  useStyles = makeStyles(theme => ({
-    container: {
-      display: "flex",
-      flexWrap: "wrap"
-    },
-    textField: {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(1),
-      marginBottom: theme.spacing(3),
-      width: 200
-    },
-    input: {
-      display: "none"
-    }
-  }))
-
-  textFieldComponent = ({
-    label,
-    input,
-    meta: { touched, invalid, error },
-    ...custom
-  }) => {
-    const classes = this.useStyles()
-
-    return (
-      <Fragment>
-        <TextField
-          label={label}
-          placeholder={label}
-          error={touched && invalid}
-          helperText={touched && error}
-          {...input}
-          {...custom}
-          className={
-            custom.size !== "small" ? classes.textField : classes.smallTextField
-          }
-        />
-      </Fragment>
-    )
-  }
-
-  radioButtonComponent = ({ input }) => {
-    const selectedValue = input.value
-    return (
-      <FormControl style={{ display: "inline-block" }}>
-        <FormLabel component="legend">AC:</FormLabel>
-        <RadioGroup
-          name={input.name}
-          value={input.value}
-          onChange={input.onChange}
-          row
-        >
-          <FormControlLabel
-            value={true}
-            control={<Radio />}
-            label="YES"
-            labelPlacement="start"
-            checked={selectedValue === "true" || selectedValue === true}
-          />
-          <FormControlLabel
-            value={false}
-            control={<Radio />}
-            label="NO"
-            labelPlacement="start"
-            checked={selectedValue === "false" || selectedValue === false}
-          />
-        </RadioGroup>
-      </FormControl>
-    )
-  }
+  //field array
 
   fieldArrayComponent = ({ fields }) => {
     return (
       <ul style={{ listStyle: "none" }}>
-        <Container align="center">
+        <Grid
+          container
+          direction="column"
+          justify="space-evenly"
+          alignItems="center"
+        >
           {fields.map((room, index) => (
-            <Paper style={{ marginTop: "20px" }}>
-              <li key={index}>
-                <Typography variant="h6" gutterBottom>
-                  Room #{index + 1}
-                </Typography>
-                <Field
-                  name={`${room}.number`}
-                  label="enter room number"
-                  component={this.textFieldComponent}
-                ></Field>
-                <Field
-                  name={`${room}.floor`}
-                  label="enter floor number"
-                  type="number"
-                  component={this.textFieldComponent}
-                ></Field>
+            <Grid item>
+              <GreyPaper>
+                <li key={index}>
+                  {/* title */}
+                  <Typography variant="h6" gutterBottom>
+                    Room #{index + 1}
+                  </Typography>
 
-                <Field
-                  name={`${room}.beds`}
-                  label="enter number of beds"
-                  type="number"
-                  component={this.textFieldComponent}
-                ></Field>
-                <Field
-                  name={`${room}.fee`}
-                  label="enter amount of fee"
-                  type="number"
-                  component={this.textFieldComponent}
-                ></Field>
-                <Field
-                  name={`${room}.AC`}
-                  component={this.radioButtonComponent}
-                >
-                  <Radio value={true} label="YES" />
-                  <Radio value={false} label="NO" />
-                </Field>
-                <br></br>
-                <Button
-                  size="small"
-                  color="primary"
-                  type="submit"
-                  variant="contained"
-                  style={{ marginBottom: "10px" }}
-                  onClick={this.props.handleSubmit(() => {
-                    this.props.onSubmit(this.props.id, fields.get(index))
-                    fields.remove(index)
-                  })}
-                >
-                  save
-                </Button>
-              </li>
-            </Paper>
+                  {/* Name */}
+                  <Field
+                    name={`${room}.number`}
+                    label="enter room number"
+                    component={TextFieldComponent}
+                    size="sm"
+                  ></Field>
+
+                  {/* floor number */}
+                  <Field
+                    name={`${room}.floor`}
+                    label="floor"
+                    type="number"
+                    size="xs"
+                    min="1"
+                    component={TextFieldComponent}
+                  ></Field>
+
+                  {/* Number of beds */}
+                  <Field
+                    name={`${room}.beds`}
+                    label="beds"
+                    type="number"
+                    size="xs"
+                    min="1"
+                    component={TextFieldComponent}
+                  ></Field>
+
+                  {/* fee */}
+                  <Field
+                    name={`${room}.fee`}
+                    label="enter amount of fee"
+                    type="number"
+                    size="sm"
+                    component={TextFieldComponent}
+                  ></Field>
+
+                  {/* AC */}
+                  <Field name={`${room}.AC`} component={radioButtonComponent}>
+                    <Radio value={true} label="YES" />
+                    <Radio value={false} label="NO" />
+                  </Field>
+                  <br></br>
+
+                  {/* save button */}
+                  <GreenButton
+                    size="small"
+                    type="submit"
+                    onClick={this.props.handleSubmit(() => {
+                      this.props.onSubmit(this.props.id, fields.get(index))
+                      fields.remove(index)
+                    })}
+                  >
+                    save
+                  </GreenButton>
+
+                  {/* remove button */}
+                  <DeleteButton
+                    onClickMethod={() => {
+                      fields.remove(index)
+                    }}
+                  ></DeleteButton>
+                </li>
+              </GreyPaper>
+            </Grid>
           ))}
-          <li key="button">
+
+          {/* Add new Button */}
+          <Grid item>
             <Button
-              color="inherit"
+              size="large"
+              color="primary"
+              variant="contained"
               onClick={() => fields.push({})}
-              style={{ marginTop: "10px" }}
             >
               Add New Room
             </Button>
-          </li>
-        </Container>
+          </Grid>
+        </Grid>
       </ul>
     )
   }
 
-  buttonRender = () => {}
+  //render
   render() {
     if (this.props.branches) {
       return (
@@ -171,14 +132,6 @@ class RoomForm extends Component {
               name="rooms"
               component={this.fieldArrayComponent}
             ></FieldArray>
-            <Button
-              size="large"
-              color="primary"
-              variant="contained"
-              href="/branches"
-            >
-              Done!
-            </Button>
           </form>
         </Fragment>
       )
@@ -188,8 +141,7 @@ class RoomForm extends Component {
   }
 }
 
-const x = new RoomForm()
-
+//validations
 const validate = (values, props) => {
   const errors = {}
   const roomArrayErrors = []
@@ -236,6 +188,7 @@ const validate = (values, props) => {
   return errors
 }
 
+//config and exports
 const mapStateToProps = (state, ownProps) => {
   return {
     branches: state.branches,

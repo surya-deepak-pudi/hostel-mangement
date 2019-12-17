@@ -7,7 +7,7 @@ import { createBranches } from "../../actions/branchesActions"
 
 const BranchCreate = props => {
   return (
-    <Container maxWidth="xl" align="center">
+    <Container maxWidth="xl" align="center" bgcolor="secondary">
       <Typography
         variant="h4"
         component="h3"
