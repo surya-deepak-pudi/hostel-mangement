@@ -20,7 +20,7 @@ const branchesReducer = (state = {}, action) => {
     case UPDATE_BRANCH:
       return { ...state, [action.payload._id]: action.payload }
     case DELETE_BRANCH:
-      return _.omit(state, action.payload)
+      return _.omit(state, action.payload._id)
     default:
       return state
   }

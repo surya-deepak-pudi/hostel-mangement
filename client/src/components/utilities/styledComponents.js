@@ -82,6 +82,17 @@ export const MdTextField = withStyles({
   }
 })(TextField)
 
+export const StyledCard = withStyles({
+  root: {
+    card: {
+      maxWidth: 345
+    },
+    media: {
+      height: 140
+    }
+  }
+})
+
 export const VerticalAlignGrid = withStyles({
   root: {
     display: "flex",

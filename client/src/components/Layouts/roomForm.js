@@ -35,7 +35,7 @@ class RoomForm extends Component {
               <GreyPaper>
                 <li key={index}>
                   {/* title */}
-                  <Typography variant="h6" gutterBottom>
+                  <Typography color="primary" variant="h6" gutterBottom>
                     Room #{index + 1}
                   </Typography>
 
@@ -180,15 +180,15 @@ const validate = (values, props) => {
         roomErrors.fee = "Required"
         roomArrayErrors[roomIndex] = roomErrors
       }
-      if (!room || room.floor<1) {
+      if (room.floor < 1) {
+        roomErrors.floor = "not a valid number"
+        roomArrayErrors[roomIndex] = roomErrors
+      }
+      if (room.beds < 1) {
         roomErrors.beds = "not a valid number"
         roomArrayErrors[roomIndex] = roomErrors
       }
-      if (!room || room.beds<1) {
-        roomErrors.beds = "not a valid number"
-        roomArrayErrors[roomIndex] = roomErrors
-      }
-      if (!room || room.fee<1) {
+      if (room.fee < 1) {
         roomErrors.fee = "not a valid number"
         roomArrayErrors[roomIndex] = roomErrors
       }

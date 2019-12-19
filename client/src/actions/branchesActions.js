@@ -29,6 +29,7 @@ export const updateBranches = (id, values) => dispatch => {
   })
 }
 export const deleteBranches = id => dispatch => {
+  console.log("im called")
   backend.delete("/branches/" + id).then(branches => {
     dispatch({ type: DELETE_BRANCH, payload: branches.data })
   })

@@ -113,6 +113,9 @@ const validate = values => {
       errors[field] = "Required"
     }
   })
+  if (values.floors < 1) {
+    errors.floors = "invalid number"
+  }
   if (values.number && !values.number.toString().match(/^\d{10}$/)) {
     errors.number = "invalid phone number"
   }

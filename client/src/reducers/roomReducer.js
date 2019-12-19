@@ -11,7 +11,7 @@ export default (state = {}, action) => {
     case CREATE_ROOMS:
       return { ...state, [action.payload._id]: action.payload }
     case DELETE_ROOMS:
-      return _.omit(state, action.payload)
+      return _.omit(state, action.payload._id)
     case SHOW_ROOMS:
       return { ...state, [action.payload._id]: action.payload }
     case EDIT_ROOMS:

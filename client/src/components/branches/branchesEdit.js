@@ -17,6 +17,7 @@ class BranchEdit extends Component {
       return (
         <Container maxWidth="xl" align="center">
           <Typography
+            color="primary"
             variant="h4"
             component="h3"
             style={{ marginTop: "20px", marginBottom: "5px" }}

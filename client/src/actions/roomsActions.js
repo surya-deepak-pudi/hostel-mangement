@@ -29,6 +29,6 @@ export const editRoomsAction = (id, rid, values) => dispatch => {
 export const deleteRoomsAction = (id, rid) => dispatch => {
   backend.delete(`/branches/${id}/rooms/${rid}`).then(rooms => {
     console.log("im called")
-    dispatch({ type: DELETE_ROOMS, payload: rid })
+    dispatch({ type: DELETE_ROOMS, payload: rooms.data })
   })
 }

@@ -30,6 +30,7 @@ class RoomsCreate extends Component {
         <Container maxWidth="xl" align="center">
           {/* heading */}
           <Typography
+            color="primary"
             variant="h4"
             component="h3"
             style={{ marginTop: "20px", marginBottom: "5px" }}
@@ -51,7 +52,7 @@ class RoomsCreate extends Component {
                       alignItems="center"
                     >
                       <Grid item>
-                        <Typography variant="subtitle1">
+                        <Typography color="primary" variant="subtitle1">
                           <b>room number:</b>
                           {room.number}
                           <b style={{ marginLeft: "30px" }}>floor:</b>
@@ -95,7 +96,9 @@ class RoomsCreate extends Component {
       return (
         <Container align="center">
           <img alt="no rooms added" src={img}></img>
-          <Typography variant="subtitle1">No rooms are added yet</Typography>
+          <Typography color="primary" variant="subtitle1">
+            No rooms are added yet
+          </Typography>
         </Container>
       )
     }
@@ -128,7 +131,7 @@ class RoomsCreate extends Component {
         {this.renderList()}
 
         <Container maxWidth="xl" align="center">
-          {/* <Typography
+          {/* <Typography color='primary'
             variant="h4"
             component="h3"
             style={{ marginTop: "20px", marginBottom: "5px" }}

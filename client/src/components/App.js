@@ -43,7 +43,7 @@ export default () => {
         <Route path="/" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/branches" exact component={Branches} />
-        <Route path="/branches/show/:id" exact component={BranchesShow} />
+        <Route path="/branches/:id" exact component={BranchesShow} />
         <Route path="/branches/new" exact component={BranchesCreate} />
         <Route path="/branches/edit/:id" exact component={BranchesEdit} />
         <Route path="/branches/:id/rooms" exact component={Rooms} />
@@ -54,7 +54,7 @@ export default () => {
           component={RoomsEdit}
         />
         <Route path="/tenents" exact component={Tenents} />
-        <Route path="/tenents/show/:id" component={TenentsShow} />
+        <Route path="/tenents/:id" component={TenentsShow} />
         <Route path="/tenents/new" component={TenentsCreate} />
         <Route path="/tenents/edit/:id" component={TenentsEdit} />
         <Route path="/balances" component={Balance} />
