@@ -1,5 +1,7 @@
+import React, { Fragment } from "react"
 import { withStyles } from "@material-ui/core/styles"
 import { TextField, Button, Paper, Grid } from "@material-ui/core"
+import HotelOutlinedIcon from "@material-ui/icons/HotelOutlined"
 
 export const StyledButton = withStyles({
   root: {
@@ -27,6 +29,26 @@ export const GreyPaper = withStyles({
     paddingLeft: "25px"
   }
 })(Paper)
+
+export class Repeator extends React.Component {
+  createArray = () => {
+    let a = []
+    for (let i = 0; i < this.props.number; i++) {
+      a[i] = i
+    }
+    return a
+  }
+  render() {
+    let newArray = this.createArray()
+    return (
+      <Fragment>
+        {newArray.map(el => {
+          return <HotelOutlinedIcon style={{ marginRight: "2px" }} />
+        })}
+      </Fragment>
+    )
+  }
+}
 
 export const RedButton = withStyles({
   root: {

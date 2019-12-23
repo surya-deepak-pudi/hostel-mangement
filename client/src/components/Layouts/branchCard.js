@@ -16,7 +16,7 @@ class RenderCard extends React.Component {
     console.log(branch)
     return (
       <Card maxWidth="350">
-        <CardActionArea href={`/branches/${branch._id6}`}>
+        <CardActionArea href={`/branches/show/${branch._id}`}>
           <CardMedia
             image={branch.image}
             title={branch.name}
@@ -25,14 +25,18 @@ class RenderCard extends React.Component {
           />
           <CardContent>
             <Typography
-              color="primary"
+              // color="primary"
               gutterBottom
               variant="h5"
               component="h2"
             >
               {branch.name}
             </Typography>
-            <Typography color="primary" variant="body2" component="p">
+            <Typography
+              //  color="primary"
+              variant="body2"
+              component="p"
+            >
               {branch.address}
             </Typography>
           </CardContent>

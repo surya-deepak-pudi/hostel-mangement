@@ -32,7 +32,7 @@ class RoomEditForm extends Component {
               variant="outlined"
               size="xs"
               name="floor"
-              label="enter floor number"
+              label="floor"
               type="number"
               component={TextFieldComponent}
             ></Field>
@@ -42,7 +42,7 @@ class RoomEditForm extends Component {
               variant="outlined"
               size="xs"
               name="beds"
-              label="enter number of beds"
+              label="beds"
               type="number"
               component={TextFieldComponent}
             ></Field>

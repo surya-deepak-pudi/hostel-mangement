@@ -7,14 +7,12 @@ import {
   RadioGroup,
   FormLabel
 } from "@material-ui/core"
-import { withStyles } from "@material-ui/styles"
 import DeleteOutlineRoundedIcon from "@material-ui/icons/DeleteOutlineRounded"
 import {
   MdTextField,
   XsTextField,
   SmTextField,
-  RedButton,
-  YellowButton
+  RedButton
 } from "./styledComponents"
 
 export const TextFieldComponent = ({

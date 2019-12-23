@@ -35,7 +35,9 @@ class RoomForm extends Component {
               <GreyPaper>
                 <li key={index}>
                   {/* title */}
-                  <Typography color="primary" variant="h6" gutterBottom>
+                  <Typography 
+                  // color="primary"
+                   variant="h6" gutterBottom>
                     Room #{index + 1}
                   </Typography>
 

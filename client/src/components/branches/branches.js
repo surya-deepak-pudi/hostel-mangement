@@ -19,7 +19,7 @@ class Branches extends Component {
     if (!_.isEmpty(this.props.branches)) {
       let branches = Object.keys(this.props.branches)
       return (
-        <Grid container justify="center" alignItems="center" spacing={2}>
+        <Grid container alignItems="center" spacing={2}>
           {branches.map(branch => {
             branch = this.props.branches[branch]
             return (
@@ -45,7 +45,7 @@ class Branches extends Component {
       <Fragment>
         <Container maxWidth="xl" align="center">
           <Typography
-            color="primary"
+            // color="primary"
             variant="h4"
             component="h3"
             style={{ marginTop: "20px", marginBottom: "30px" }}

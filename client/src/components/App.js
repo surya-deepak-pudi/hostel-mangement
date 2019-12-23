@@ -22,7 +22,7 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       light: "#428e92",
-      main: "#006064",
+      main: "#138496",
       dark: "#00363a",
       contrastText: "white"
     },
@@ -43,8 +43,8 @@ export default () => {
         <Route path="/" exact component={Home} />
         <Route path="/login" component={Login} />
         <Route path="/branches" exact component={Branches} />
-        <Route path="/branches/:id" exact component={BranchesShow} />
         <Route path="/branches/new" exact component={BranchesCreate} />
+        <Route path="/branches/show/:id" exact component={BranchesShow} />
         <Route path="/branches/edit/:id" exact component={BranchesEdit} />
         <Route path="/branches/:id/rooms" exact component={Rooms} />
         <Route path="/branches/:id/rooms/new" exact component={RoomsCreate} />
@@ -54,10 +54,10 @@ export default () => {
           component={RoomsEdit}
         />
         <Route path="/tenents" exact component={Tenents} />
-        <Route path="/tenents/:id" component={TenentsShow} />
-        <Route path="/tenents/new" component={TenentsCreate} />
-        <Route path="/tenents/edit/:id" component={TenentsEdit} />
-        <Route path="/balances" component={Balance} />
+        <Route path="/tenents/show/:id" exact component={TenentsShow} />
+        <Route path="/tenents/new" exact component={TenentsCreate} />
+        <Route path="/tenents/edit/:id" exact component={TenentsEdit} />
+        <Route path="/balances" exact component={Balance} />
       </BrowserRouter>
     </MuiThemeProvider>
   )

@@ -12,7 +12,7 @@ const store = createStore(reducers, composeEnhancers(applyMiddleware(Thunk)))
 
 ReactDOM.render(
   <Provider store={store}>
-    <Helmet bodyAttributes={{ style: "background-color : #e0f7fa" }} />
+    {/* <Helmet bodyAttributes={{ style: "background-color : #e0f7fa" }} /> */}
     <App />
   </Provider>,
   document.querySelector("#root")
