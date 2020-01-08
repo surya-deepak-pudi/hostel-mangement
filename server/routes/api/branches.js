@@ -1,133 +1,196 @@
 const express = require("express")
 const router = express.Router()
+const passport = require("passport")
 const Branch = require("../../models/Branches")
+const branchesMiddleware = require("../../middlewares/branches")
 
 //getting all branches
-router.get("/", (req, res) => {
-  Branch.find()
-    .then(branches => {
-      return res.status(200).json(branches)
-    })
-    .catch(err => {
-      return res.status(400)
-    })
-})
-
-//create a new branch
-router.post("/", (req, res) => {
-  Branch.findOne({ name: req.body.name }, (err, branches) => {
-    if (err) {
-      return res.status(400).json({ msg: "error finding branch" })
-    }
-    if (branches) {
-      return res.status(400).json("branch already exists")
-    } else {
-      Branch.create(req.body, (err, branchCreated) => {
-        if (err) {
-          return res.status(400).json("branch not created")
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Branch.find({ author: req.user._id })
+      .then(branches => {
+        if (branches) {
+          return res.status(200).json(branches)
         } else {
-          return res.status(200).json(branchCreated)
+          return res.status(400).json({ msg: "No branches available" })
         }
       })
-    }
-  })
-})
+      .catch(err => {
+        return res.status(400).json({ server: "error finding branches" })
+      })
+  }
+)
 
-//show a branch
-router.get("/:id", (req, res) => {
-  Branch.findOne({ _id: req.params.id })
-    .populate("rooms")
-    .exec((err, branch) => {
+//create a new branch
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  branchesMiddleware.nameExists,
+  (req, res) => {
+    Branch.create({ ...req.body, author: req.user }, (err, branchCreated) => {
       if (err) {
-        return res.status(400)
+        return res.status(400).json({ server: "branch not created" })
       } else {
-        return res.status(200).json(branch)
+        return res.status(200).json(branchCreated)
       }
     })
-})
+  }
+)
+
+//show a branch
+router.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  branchesMiddleware.isAuthor,
+  (req, res) => {
+    Branch.findById(req.params.id)
+      .populate("rooms")
+      .exec((err, branch) => {
+        if (err) {
+          return res.status(400).json({ server: "error finding branch" })
+        } else {
+          if (branch) {
+            return res.status(200).json(branch)
+          } else {
+            return res.status(400).json({ server: "no branch available" })
+          }
+        }
+      })
+  }
+)
 
 //editing a branch
-router.put("/:id", (req, res) => {
-  Branch.findByIdAndUpdate(req.params.id, req.body)
-    .then(branch => {
-      return res.status(200).json(branch)
-    })
-    .catch(err => {
-      return res.status(400)
-    })
-})
+router.put(
+  "/:id",
+  branchesMiddleware.nameExists,
+  branchesMiddleware.isAuthor,
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Branch.findById(req.params.id)
+    Branch.findByIdAndUpdate(req.params.id, req.body)
+      .then(branch => {
+        return res.status(200).json(branch)
+      })
+      .catch(err => {
+        return res.status(400).json({ server: "error in updating branch" })
+      })
+  }
+)
 
 //deleting a branch
-router.delete("/:id", (req, res) => {
-  Branch.findByIdAndDelete(req.params.id)
-    .then(branch => {
-      return res.status(200).json(branch)
-    })
-    .catch(err => {
-      return res.status(400)
-    })
-})
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  branchesMiddleware.isAuthor,
+  (req, res) => {
+    Branch.findByIdAndDelete(req.params.id)
+      .then(branch => {
+        return res.status(200).json(branch)
+      })
+      .catch(err => {
+        return res.status(400).json({ server: "error deleting branch" })
+      })
+  }
+)
 
 const Room = require("../../models/Rooms")
 
 //creating a room
-router.post("/:id/rooms/", (req, res) => {
-  Branch.findById(req.params.id, (err, branch) => {
-    if (err) {
-      return res.status(400).json("branch not found")
-    } else {
-      Room.create({ branch: branch.name, ...req.body }, (error, room) => {
-        if (error) {
-          return res.status(400).json("room is not created")
-        } else {
-          branch.rooms.push(room)
-          branch.save()
-          return res.status(200).json(room)
-        }
-      })
-    }
-  })
-})
+router.post(
+  "/:id/rooms/",
+  passport.authenticate("jwt", { session: false }),
+  branchesMiddleware.isAuthor,
+  (req, res) => {
+    console.log("i crossed middleware");
+    Branch.findById(req.params.id, (err, branch) => {
+      if (err) {
+        return res.status(400).json({ server: "Error finding branch" })
+      }
+      if (branch) {
+        Room.create({ branch: branch.name, ...req.body }, (error, room) => {
+          if (error) {
+            return res.status(400).json({ server: "Room is not created" })
+          } 
+          else {
+            branch.rooms.push(room)
+            branch.save()
+            return res.status(200).json(room)
+          }
+        })
+      }
+      else{
+      return res.status(400).json({ server: "Branch doesn't exist" })}
+    })
+  }
+)
 
 //fetching a room
-router.get("/:id/rooms/:roomId", (req, res) => {
-  Room.findById(req.params.roomId)
-    .then(room => {
-      return res.status(200).json(room)
-    })
-    .catch(err => {
-      return res.status(400).json(err)
-    })
-})
+router.get(
+  "/:id/rooms/:roomId",
+  passport.authenticate("jwt", { session: false }),
+  branchesMiddleware.isAuthor,
+  (req, res) => {
+    Room.findById(req.params.roomId)
+      .then(room => {
+        if (room) {
+          return res.status(200).json(room)
+        }
+        else{
+        return res.status(400).json({ server: "Room doesnt exist" })}
+      })
+      .catch(err => {
+        return res.status(400).json({ sever: "Error in finding the room" })
+      })
+  }
+)
 
 //editing a room
-router.put("/:id/rooms/:roomId", (req, res) => {
-  Room.findByIdAndUpdate(req.params.roomId, req.body)
-    .then(room => {
-      return res.status(200).json(room.data)
-    })
-    .catch(err => {
-      return res.status(400)
-    })
-})
+router.put(
+  "/:id/rooms/:roomId",
+  passport.authenticate("jwt", { session: false }),
+  branchesMiddleware.isAuthor,
+  (req, res) => {
+    Room.findByIdAndUpdate(req.params.roomId, req.body)
+      .then(room => {
+        if (room) {
+          return res.status(200).json(room)
+        }
+        else{
+        return res.status(400).json({ server: "room is not edited" })}
+      })
+      .catch(err => {
+        return res.status(400).json({ server: "Error in editing the room" })
+      })
+  }
+)
 
 //deleting a room
-router.delete("/:id/rooms/:roomId", (req, res) => {
-  Room.findByIdAndDelete(req.params.roomId, (err, room) => {
-    if (err) {
-      return res.status(400)
-    } else {
-      Branch.findById(req.params.id, (error, branch) => {
-        if (!error) {
-          branch.rooms.splice(branch.rooms.indexOf(req.params.roomId), 1)
-          branch.save()
-        } else {
-          return res.status(400).json({ msg: "couldnt find the branch" })
-        }
-      })
-      return res.status(200).json(room)
-    }
-  })
-})
+router.delete(
+  "/:id/rooms/:roomId",
+  passport.authenticate("jwt", { session: false }),
+  branchesMiddleware.isAuthor,
+  (req, res) => {
+    Room.findByIdAndDelete(req.params.roomId, (err, room) => {
+      if (err) {
+        return res.status(400), json({ server: "Error in deleting the room" })
+      } else {
+        Branch.findById(req.params.id, (error, branch) => {
+          if (error) {
+            return res.status(400).json({ server: "Error finding the branch" })
+          }
+          if (branch) {
+            branch.rooms.splice(branch.rooms.indexOf(req.params.roomId), 1)
+            branch.save()
+            return res.status(200).json(room)
+          }
+          else{
+          return res.status(400).json({ server: "Branch Doesnt exist" })}
+        })
+      }
+    })
+  }
+)
 
 module.exports = router
