@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Container, Typography } from "@material-ui/core"
+import { Container, Typography, CircularProgress } from "@material-ui/core"
 import { connect } from "react-redux"
 import _ from "lodash"
 import { updateBranches, showBranches } from "../../actions/branchesActions"
@@ -42,8 +42,15 @@ class BranchEdit extends Component {
       )
     } else {
       return (
-        <div>
-          <p>not loaded yet</p>
+        <div
+          style={{
+            marginTop: "300px",
+            marginBottom: "300px"
+          }}
+        >
+          <Container align="center">
+            <CircularProgress />
+          </Container>
         </div>
       )
     }

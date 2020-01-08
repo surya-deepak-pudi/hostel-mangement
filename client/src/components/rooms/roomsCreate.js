@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react"
 import { connect } from "react-redux"
-import { Container, Typography, Button, Grid } from "@material-ui/core"
+import { Container, Typography, Button, Grid, Paper } from "@material-ui/core"
+import { withStyles } from "@material-ui/core/styles"
 import _ from "lodash"
 import {
   createRoomsAction,
@@ -53,8 +54,9 @@ class RoomsCreate extends Component {
                     >
                       <Grid item>
                         <Typography
-                        //  color="primary" 
-                         variant="subtitle1">
+                          //  color="primary"
+                          variant="subtitle1"
+                        >
                           <b>room number:</b>
                           {room.number}
                           <b style={{ marginLeft: "30px" }}>floor:</b>
@@ -99,8 +101,9 @@ class RoomsCreate extends Component {
         <Container align="center">
           <img alt="no rooms added" src={img}></img>
           <Typography
-          //  color="primary" 
-           variant="subtitle1">
+            //  color="primary"
+            variant="subtitle1"
+          >
             No rooms are added yet
           </Typography>
         </Container>
@@ -133,16 +136,7 @@ class RoomsCreate extends Component {
     return (
       <Fragment>
         {this.renderList()}
-
         <Container maxWidth="xl" align="center">
-          {/* <Typography 
-          // color='primary'
-            variant="h4"
-            component="h3"
-            style={{ marginTop: "20px", marginBottom: "5px" }}
-          >
-            Add Rooms
-          </Typography> */}
           <br></br>
           <RoomForm
             onSubmit={this.props.createRoomsAction}

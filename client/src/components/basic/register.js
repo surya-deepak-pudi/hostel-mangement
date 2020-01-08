@@ -1,31 +1,13 @@
 import React, { Component, Fragment } from "react"
 import { Field, reduxForm } from "redux-form"
-import { withRouter, Link } from "react-router-dom"
+import { withRouter } from "react-router-dom"
 import _ from "lodash"
-import { Container, Typography, Button, Paper } from "@material-ui/core"
+import { Container, Typography, Button } from "@material-ui/core"
 import { TextFieldComponent } from "../utilities/FieldComponets"
 import { connect } from "react-redux"
-import { loginUser } from "../../actions/authActions"
+import { registerUser } from "../../actions/authActions"
 
-class Login extends Component {
-  renderAlert = data => {
-    return (
-      <Paper
-        style={{
-          color: "black",
-          backgroundColor: "#ffcdd2",
-          width: "420px",
-          marginRight: "7px",
-          marginBottom: "20px",
-          padding: "5px"
-        }}
-      >
-        <Typography variant="subtitle1" component="h3">
-          {data}
-        </Typography>
-      </Paper>
-    )
-  }
+class Register extends Component {
   render() {
     return (
       <Fragment>
@@ -36,20 +18,34 @@ class Login extends Component {
             component="h3"
             style={{ marginTop: "20px", marginBottom: "30px" }}
           >
-            Login
+            Register
           </Typography>
-          {this.props.errors.msg && this.renderAlert(this.props.errors.msg)}
           <form
             onSubmit={this.props.handleSubmit(formValues => {
-              this.props.loginUser(formValues, this.props.history)
+              //   console.log(formValues)
+              //   console.log(this.props.history)
+              formValues = _.omit(formValues, "retype")
+              this.props.registerUser(formValues, this.props.history)
             })}
           >
+            <Field
+              name="name"
+              label="Enter username"
+              component={TextFieldComponent}
+              size="md"
+              variant="outlined"
+            ></Field>
+            <br />
             <Field
               name="mail"
               label="Enter email id"
               component={TextFieldComponent}
+              provideError={!_.isEmpty(this.props.errors) ? true : false}
               size="md"
               variant="outlined"
+              helperText={
+                !_.isEmpty(this.props.errors) ? this.props.errors.mail : null
+              }
             ></Field>
             <br />
             <Field
@@ -61,21 +57,25 @@ class Login extends Component {
               variant="outlined"
             ></Field>
             <br />
+            <Field
+              name="retype"
+              label="Re-type password"
+              type="password"
+              component={TextFieldComponent}
+              size="md"
+              variant="outlined"
+            ></Field>
+            <br />
             <Button
               color="primary"
               size="large"
               variant="contained"
-              style={{ marginBottom: "30px" }}
+              style={{ marginTop: "30px" }}
               type="submit"
             >
-              Log in
+              SignUp
             </Button>
           </form>
-          <Link to="/register" style={{ marginTop: "10px" }}>
-            <Typography variant="caption" component="p">
-              Not a user? SignUp
-            </Typography>
-          </Link>
         </Container>
       </Fragment>
     )
@@ -84,29 +84,32 @@ class Login extends Component {
 
 const validate = (values, props) => {
   //   console.log(props)
-  let errors = {}
-  const requiredFields = ["mail", "password"]
+  const errors = {}
+  const requiredFields = ["name", "mail", "password", "retype"]
   requiredFields.forEach(field => {
     if (!values[field]) {
-      errors[field] = "Required!"
+      errors[field] = "Required"
     }
   })
+  if (values["password"] !== values["retype"]) {
+    errors["retype"] = "Not Matching"
+  }
   if (
     values.mail &&
     !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.mail)
   ) {
-    errors.mail = "Invalid email address!"
+    errors.mail = "Invalid email address"
   }
+  //   console.log(props.users.errors)
   return errors
 }
 
 const mapStateToProps = state => {
   return {
-    errors: state.errors,
-    auth: state.auth
+    errors: state.errors
   }
 }
 
-export default connect(mapStateToProps, { loginUser })(
-  reduxForm({ form: "loginForm", validate })(withRouter(Login))
+export default connect(mapStateToProps, { registerUser })(
+  reduxForm({ form: "registerForm", validate })(withRouter(Register))
 )

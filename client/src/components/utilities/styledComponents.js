@@ -1,7 +1,8 @@
 import React, { Fragment } from "react"
 import { withStyles } from "@material-ui/core/styles"
-import { TextField, Button, Paper, Grid } from "@material-ui/core"
+import { TextField, Button, Paper, Grid, Select } from "@material-ui/core"
 import HotelOutlinedIcon from "@material-ui/icons/HotelOutlined"
+import HotelIcon from "@material-ui/icons/Hotel"
 
 export const StyledButton = withStyles({
   root: {
@@ -31,21 +32,34 @@ export const GreyPaper = withStyles({
 })(Paper)
 
 export class Repeator extends React.Component {
-  createArray = () => {
+  createArray = number => {
     let a = []
-    for (let i = 0; i < this.props.number; i++) {
+    for (let i = 0; i < number; i++) {
       a[i] = i
     }
     return a
   }
   render() {
-    let newArray = this.createArray()
+    let filled = this.createArray(this.props.number - this.props.vacancies)
+    let vacancies = this.createArray(this.props.vacancies)
     return (
-      <Fragment>
-        {newArray.map(el => {
-          return <HotelOutlinedIcon style={{ marginRight: "2px" }} />
-        })}
-      </Fragment>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="baseline"
+      >
+        <Grid item>
+          {filled.map(el => {
+            return <HotelIcon style={{ marginRight: "2px" }} />
+          })}
+        </Grid>
+        <Grid item>
+          {vacancies.map(el => {
+            return <HotelOutlinedIcon style={{ marginRight: "2px" }} />
+          })}
+        </Grid>
+      </Grid>
     )
   }
 }
@@ -95,6 +109,12 @@ export const SmTextField = withStyles({
     marginBottom: "20px"
   }
 })(TextField)
+
+export const StyledSelect = withStyles({
+  root: {
+    width: 200
+  }
+})(Select)
 
 export const MdTextField = withStyles({
   root: {

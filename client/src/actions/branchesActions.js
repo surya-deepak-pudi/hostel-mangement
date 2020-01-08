@@ -6,19 +6,31 @@ import {
   CREATE_BRANCH
 } from "./actionTypes"
 // import { createRoomsAction } from "./roomsActions"
+import axios from "axios"
 import backend from "../api/backendApi"
 import history from "../history"
 
 export const fetchBranches = () => dispatch => {
-  backend.get("/branches").then(branches => {
-    console.log(branches.data)
-    dispatch({ type: FETCH_BRANCH, payload: branches.data })
-  })
+  backend
+    .get("/branches")
+    .then(branches => {
+      console.log(branches.data)
+      dispatch({ type: FETCH_BRANCH, payload: branches.data })
+    })
+    .catch(err => {
+      console.log(err.response.data)
+    })
 }
 export const showBranches = id => dispatch => {
-  backend.get(`/branches/${id}`).then(branches => {
-    dispatch({ type: SHOW_BRANCH, payload: branches.data })
-  })
+  backend
+    .get(`/branches/${id}`)
+    .then(branches => {
+      console.log(branches)
+      dispatch({ type: SHOW_BRANCH, payload: branches.data })
+    })
+    .catch(err => {
+      console.log(err.response.data)
+    })
 }
 export const updateBranches = (id, values) => dispatch => {
   console.log("im called")
@@ -38,5 +50,6 @@ export const createBranches = (id, values) => dispatch => {
   backend.post("/branches", values).then(branches => {
     dispatch({ type: CREATE_BRANCH, payload: branches.data })
     history.push(`/branches/${branches.data._id}/rooms/new`)
+    window.location.reload(false)
   })
 }

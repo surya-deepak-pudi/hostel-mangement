@@ -8,6 +8,7 @@ const RoomSchema = new Schema({
   beds: Number,
   AC: Boolean,
   fee: Number,
+  vacancies: Number,
   tenents: [
     {
       type: mongoose.Schema.Types.ObjectId,

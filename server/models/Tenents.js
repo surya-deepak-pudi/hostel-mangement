@@ -4,20 +4,26 @@ const Schema = mongoose.Schema
 const TenentSchema = new Schema({
   name: String,
   mail: String,
-  mobile: Number,
+  number: Number,
   advance: Number,
   adhar: String,
   date: Date,
   nonVeg: Boolean,
   occupation: String,
   Branch: String,
+  BranchName: String,
   roomNumber: String,
-  advancePaid: Number,
+  room: String,
   dues: Number,
   rent: Number,
   gaurdianName: String,
   gaurdianAddress: String,
-  gaurdianNumber: Number
+  gaurdianNumber: Number,
+  image: String,
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }
 })
 
 module.exports = mongoose.model("Tenent", TenentSchema)

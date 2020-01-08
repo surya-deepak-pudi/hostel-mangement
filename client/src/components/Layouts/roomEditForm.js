@@ -10,7 +10,12 @@ class RoomEditForm extends Component {
   render() {
     console.log(this.props)
     return (
-      <form>
+      <form
+        onSubmit={this.props.handleSubmit(values => {
+          console.log("im pressed")
+          this.props.editRoomsAction(this.props.id, this.props.rid, values)
+        })}
+      >
         <Grid
           container
           direction="column"
@@ -65,14 +70,7 @@ class RoomEditForm extends Component {
           </Grid>
           <Grid item>
             <Button
-              onClick={this.props.handleSubmit(values => {
-                console.log("im pressed")
-                this.props.editRoomsAction(
-                  this.props.id,
-                  this.props.rid,
-                  values
-                )
-              })}
+              type="submit"
               size="large"
               color="primary"
               variant="contained"

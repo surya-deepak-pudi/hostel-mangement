@@ -7,7 +7,8 @@ import {
 import backend from "../api/backendApi"
 
 export const createRoomsAction = (id, values) => dispatch => {
-  const room = values
+  const room = { ...values, vacancies: values.beds }
+  console.log(room)
   backend.post(`/branches/${id}/rooms/`, room).then(rooms => {
     dispatch({ type: CREATE_ROOMS, payload: rooms.data })
   })

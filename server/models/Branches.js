@@ -8,6 +8,10 @@ const BranchSchema = new Schema({
   floors: Number,
   address: String,
   image: String,
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
   rooms: [
     {
       type: mongoose.Schema.Types.ObjectId,

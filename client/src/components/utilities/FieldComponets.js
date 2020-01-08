@@ -2,18 +2,23 @@ import React from "react"
 import {
   TextField,
   Radio,
-  FormControl,
   FormControlLabel,
   RadioGroup,
-  FormLabel
+  FormLabel,
+  FormControl,
+  InputLabel,
+  FormHelperText,
+  Input
 } from "@material-ui/core"
 import DeleteOutlineRoundedIcon from "@material-ui/icons/DeleteOutlineRounded"
 import {
   MdTextField,
   XsTextField,
   SmTextField,
-  RedButton
+  RedButton,
+  StyledSelect
 } from "./styledComponents"
+import { Field } from "redux-form"
 
 export const TextFieldComponent = ({
   label,
@@ -69,6 +74,32 @@ export const TextFieldComponent = ({
   }
 }
 
+export const SyncTextField = data => {
+  const {
+    label,
+    input,
+    meta: { touched, invalid, error },
+    ...custom
+  } = data
+  console.log(data)
+  return (
+    <FormControl>
+      <InputLabel htmlFor="component-sync">{label}</InputLabel>
+      <Input
+        placeholder={label}
+        id="component-sync"
+        {...input}
+        error={(touched && invalid) || custom.provideError}
+        helperText={touched && error}
+        aria-describedby="component-error-text"
+      />
+      <FormHelperText id="component-error-text" error={true}>
+        {custom.helperText}
+      </FormHelperText>
+    </FormControl>
+  )
+}
+
 export const radioButtonComponent = ({ input }) => {
   const selectedValue = input.value
   return (
@@ -105,4 +136,59 @@ export const DeleteButton = ({ onClickMethod }) => {
       <DeleteOutlineRoundedIcon></DeleteOutlineRoundedIcon>
     </RedButton>
   )
+}
+
+export const renderFromHelper = ({ touched, error }) => {
+  if (!(touched && error)) {
+    return
+  } else {
+    return <FormHelperText>{touched && error}</FormHelperText>
+  }
+}
+
+export const renderSelectField = ({
+  input,
+  label,
+  meta: { touched, error },
+  children,
+  ...custom
+}) => (
+  <FormControl error={touched && error} style={{ marginBottom: "20px" }}>
+    <InputLabel htmlFor="age-native-simple" style={{ marginLeft: "20px" }}>
+      {input.name}
+    </InputLabel>
+    <StyledSelect
+      variant="outlined"
+      native
+      {...input}
+      {...custom}
+      inputProps={{
+        name: "Branch",
+        id: "age-native-simple"
+      }}
+    >
+      {children}
+    </StyledSelect>
+    {renderFromHelper({ touched, error })}
+  </FormControl>
+)
+
+export const renderOptions = branches => {
+  if (branches) {
+    let branchesArr = []
+    let i = 0
+    for (let id in branches) {
+      let branch = branches[id]
+      branchesArr[i] = { id: branch._id, name: branch.name }
+      i++
+    }
+    return (
+      <Field name="Branch" component={renderSelectField} label="branch">
+        <option value=""></option>
+        {branchesArr.map(branch => {
+          return <option value={branch.id}>{branch.name}</option>
+        })}
+      </Field>
+    )
+  }
 }

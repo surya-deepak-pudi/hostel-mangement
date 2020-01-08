@@ -10,6 +10,7 @@ import {
 import RenderRooms from "../Layouts/RenderRooms"
 import { GreyPaper } from "../utilities/styledComponents"
 import { showBranches } from "../../actions/branchesActions"
+import { deleteRoomsAction } from "../../actions/roomsActions"
 
 class ShowBranch extends Component {
   componentDidMount() {
@@ -18,7 +19,6 @@ class ShowBranch extends Component {
   render() {
     const { branches } = this.props
     if (!_.isEmpty(branches)) {
-      console.log(branches)
       return (
         <Fragment>
           <Container>
@@ -48,6 +48,7 @@ class ShowBranch extends Component {
             </GreyPaper>
             <RenderRooms
               rooms={branches.rooms}
+              delete={this.props.deleteRoomsAction}
               id={this.props.match.params.id}
             ></RenderRooms>
             <Button
@@ -64,8 +65,15 @@ class ShowBranch extends Component {
       )
     } else {
       return (
-        <div style={{ marginTop: "150px", marginBottom: "150px" }}>
-          <CircularProgress />
+        <div
+          style={{
+            marginTop: "300px",
+            marginBottom: "300px"
+          }}
+        >
+          <Container align="center">
+            <CircularProgress />
+          </Container>
         </div>
       )
     }
@@ -73,7 +81,12 @@ class ShowBranch extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  return { branches: state.branches[ownProps.match.params.id] }
+  return {
+    branches: state.branches[ownProps.match.params.id],
+    rooms: state.rooms
+  }
 }
 
-export default connect(mapStateToProps, { showBranches })(ShowBranch)
+export default connect(mapStateToProps, { showBranches, deleteRoomsAction })(
+  ShowBranch
+)

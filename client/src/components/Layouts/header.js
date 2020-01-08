@@ -4,55 +4,85 @@ import {
   Toolbar,
   IconButton,
   Typography,
-  Button
+  Button,
+  Grid
 } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
+import { withRouter } from "react-router-dom"
+import { connect } from "react-redux"
 import MenuIcon from "@material-ui/icons/Menu"
+import { logoutUser } from "../../actions/authActions"
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
-  title: {
-    flexGrow: 400
-  },
-  button: {
-    marginRight: theme.spacing(3)
+class Header extends React.Component {
+  componentDidMount() {
+    if (
+      !this.props.auth.isAuthenticated &&
+      this.props.location.pathname !== "/login" &&
+      this.props.location.pathname !== "/register"
+    ) {
+      this.props.history.push("/")
+    }
   }
-}))
-
-const Header = props => {
-  const classes = useStyles()
-  return (
-    <AppBar position="static" className={classes.palette}>
-      <Toolbar>
-        <IconButton
-          edge="start"
-          className={classes.menuButton}
+  buttonRender = () => {
+    if (this.props.auth.isAuthenticated) {
+      return (
+        <Button
+          onClick={() => this.props.logoutUser(this.props.history)}
           color="inherit"
-          aria-label="menu"
-          href="/"
+          style={{marginLeft:"3px"}}
         >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" className={classes.title}>
-          Hostel Name
-        </Typography>
-        <Button href="/branches" color="inherit" className={classes.button}>
-          Branches
+          Logout
         </Button>
-        <Button href="/tenents" color="inherit" className={classes.button}>
-          Tenents
+      )
+    } else {
+      return (
+        <Button href="/login" color="inherit">
+          Login
         </Button>
-        <Button href="/balances" color="inherit" className={classes.button}>
-          Balance
-        </Button>
-      </Toolbar>
-    </AppBar>
-  )
+      )
+    }
+  }
+  render() {
+    return (
+      <AppBar position="static">
+        <Toolbar>
+          <Grid container justify="space-between" alignItems="center">
+            <Grid item>
+              <Grid container justify="flex-start" alignItems="center">
+                <Grid item>
+                  <IconButton
+                    edge="start"
+                    color="inherit"
+                    aria-label="menu"
+                    href="/"
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                </Grid>
+                <Grid item>
+                  <Typography variant="h6">Hostel Name</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Button href="/branches" color="inherit" style={{marginLeft:"3px"}}>
+                Branches
+              </Button>
+              <Button href="/tenents" color="inherit" style={{marginLeft:"3px"}}>
+                Tenents
+              </Button>
+              <Button href="/balances" color="inherit" style={{marginLeft:"3px"}}>
+                Balance
+              </Button>
+              {this.buttonRender()}
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+    )
+  }
 }
 
-export default Header
+const MapStateToProps = state => {
+  return { auth: state.auth }
+}
+export default connect(MapStateToProps, { logoutUser })(withRouter(Header))

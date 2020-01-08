@@ -9,7 +9,7 @@ const BranchCreate = props => {
   return (
     <Container maxWidth="xl" align="center" bgcolor="secondary">
       <Typography
-        color="primary"
+        // color="primary"
         variant="h4"
         component="h3"
         style={{ marginTop: "20px", marginBottom: "5px" }}
